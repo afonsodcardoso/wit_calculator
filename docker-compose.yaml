@@ -1,0 +1,51 @@
+# after: docker-compose.yaml
+version: "3.8"
+
+services:
+  zookeeper:
+    image: bitnami/zookeeper:latest
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+    ports:
+      - "127.0.0.1:2181:2181"   # bind to localhost only
+
+  kafka:
+    image: bitnami/kafka:3.6.1
+    environment:
+      - KAFKA_BROKER_ID=1
+      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT
+      - ALLOW_PLAINTEXT_LISTENER=yes
+    ports:
+      - "127.0.0.1:9092:9092"   # bind to localhost only
+    depends_on:
+      - zookeeper
+
+  calculator:
+    build:
+      context: .
+      dockerfile: calculator/Dockerfile
+    container_name: calculator
+    depends_on:
+      - kafka
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+    ports:
+      - "127.0.0.1:8081:8080"   # keep the app local to your machine
+
+  rest:
+    build:
+      context: .
+      dockerfile: rest/Dockerfile
+    container_name: rest
+    depends_on:
+      - kafka
+      - calculator
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+    ports:
+      - "127.0.0.1:8080:8080"   # keep the app local to your machine
