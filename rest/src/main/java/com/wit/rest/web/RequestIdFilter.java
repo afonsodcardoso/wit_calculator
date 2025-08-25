@@ -1,4 +1,3 @@
-// after: rest/src/main/java/com/wit/rest/web/RequestIdFilter.java
 package com.wit.rest.web;
 
 import jakarta.servlet.*;
@@ -35,7 +34,7 @@ public class RequestIdFilter implements Filter {
     // Put into MDC for downstream logging in the REST app
     MDC.put(MDC_KEY, id);
 
-    // Ensure it's on the response (used by the bonus requirement)
+    // Ensure it's on the response
     response.setHeader(HEADER, id);
 
     try {
