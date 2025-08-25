@@ -34,7 +34,7 @@ services:
       - SPRING_PROFILES_ACTIVE=docker
       - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
     ports:
-      - "127.0.0.1:8081:8080"   # keep the app local to your machine
+      - "127.0.0.1:8081:8080"   # keep the app local
 
   rest:
     build:
@@ -48,4 +48,4 @@ services:
       - SPRING_PROFILES_ACTIVE=docker
       - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
     ports:
-      - "127.0.0.1:8080:8080"   # keep the app local to your machine
+      - "127.0.0.1:8080:8080"   # keep the app local
