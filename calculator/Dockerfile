@@ -1,18 +1,18 @@
 # calculator/Dockerfile
-# Stage 1 - build using the repo gradle wrapper (build only calculator module)
+# build using the repo gradle wrapper (build only calculator module)
 FROM eclipse-temurin:21-jdk AS build
 WORKDIR /workspace
 
-# copy entire repository (you can optimize .dockerignore to reduce size)
+# copy entire repository
 COPY . .
 
 # ensure gradle wrapper is executable
 RUN chmod +x ./gradlew
 
-# build only the calculator module (skip tests to speed up builds; remove -x test if you want tests)
+# build only the calculator module (skip tests to speed up builds)
 RUN ./gradlew :calculator:bootJar --no-daemon -x test
 
-# Stage 2 - runtime
+# runtime
 FROM eclipse-temurin:21-jre
 WORKDIR /app
 
