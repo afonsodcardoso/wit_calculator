@@ -1,4 +1,3 @@
-// after: rest/src/main/java/com/wit/rest/service/CalculatorClient.java
 package com.wit.rest.service;
 
 import com.wit.calculator.model.CalculatorRequest;
